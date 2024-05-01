@@ -17,7 +17,7 @@ module regfile(
     if (i_resetn) begin
       mem = 0;
     end
-    if (i_we) begin
+    if (i_we && i_rd) begin
       mem[i_rd] = i_data_in;
     end
   end
