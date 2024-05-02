@@ -12,13 +12,13 @@ module mem_access (
   input i_mem_to_reg,
   input i_reg_write,
 
-  output [31:0] o_instruction,
-  output [63:0] o_alu_result,
-  output [63:0] o_mem_data,
+  output reg [31:0] o_instruction,
+  output reg [63:0] o_alu_result,
+  output reg [63:0] o_mem_data,
 
-  output o_reg_write,
-  output o_mem_to_reg,
-  output o_pc_src
+  output reg o_reg_write,
+  output reg o_mem_to_reg,
+  output reg o_pc_src
   // TODO: implement access point to external memory
 );
   
@@ -39,13 +39,12 @@ module mem_access (
   reg pc_src;
   reg reg_write;
 
-  assign o_alu_result = alu_result;
-  assign o_mem_data = mem_data;
-  assign o_mem_to_reg = mem_to_reg;
-  assign o_reg_write = reg_write;
-  assign o_pc_src = pc_src;
-  assign o_instruction = instruction;
 
+  // DEBUG SIGNALS
+  wire [31:0] m49 = data_memory[49];
+  wire [31:0] m54 = data_memory[54];
+  wire [31:0] m46 = data_memory[46];
+  wire [31:0] m63 = data_memory[63];
   always @ (posedge i_clk) begin
     instruction <= i_instruction;
     reg_write <= i_reg_write;
@@ -61,4 +60,12 @@ module mem_access (
     end
   end
 
+  always @ (negedge i_clk) begin
+    o_alu_result <= alu_result;
+    o_mem_data <= mem_data;
+    o_mem_to_reg <= mem_to_reg;
+    o_reg_write <= reg_write;
+    o_pc_src <= pc_src;
+    o_instruction <= instruction;
+  end
 endmodule

@@ -14,18 +14,18 @@ module execute (
   input i_mem_to_reg,
   input i_reg_write,
 
-  output [31:0] o_instruction,
-  output [63:0] o_pc,
-  output [63:0] o_rs2_value,
-  output [63:0] o_alu_result,
-  output o_alu_zero,
-  output [63:0] o_jmp_addr,
+  output reg [31:0] o_instruction,
+  output reg [63:0] o_pc,
+  output reg [63:0] o_rs2_value,
+  output reg [63:0] o_alu_result,
+  output reg o_alu_zero,
+  output reg [63:0] o_jmp_addr,
 
-  output o_branch,
-  output o_mem_write,
-  output o_mem_read,
-  output o_mem_to_reg,
-  output o_reg_write
+  output reg o_branch,
+  output reg o_mem_write,
+  output reg o_mem_read,
+  output reg o_mem_to_reg,
+  output reg o_reg_write
 
 );
 
@@ -58,18 +58,6 @@ module execute (
   reg [63:0] alu_result;
   reg alu_zero;
 
-  assign o_branch = branch;
-  assign o_mem_write = mem_write;
-  assign o_mem_read = mem_read;
-  assign o_mem_to_reg = mem_to_reg;
-  assign o_reg_write = reg_write;
-  
-  assign o_rs2_value = rs2_value;
-  assign o_instruction = instruction;
-  assign o_pc = pc;
-  assign o_alu_zero = alu_zero;
-  assign o_alu_result = alu_result;
-  assign o_jmp_addr = jmp_addr;
 
 
   always @ (posedge i_clk)  begin
@@ -89,7 +77,7 @@ module execute (
       2'b01: alu_control <= 4'b0110;
       2'b10: begin
         case (i_instruction[14:12])
-          3'b000: alu_control <= {1'b0, i_instruction[3], 2'b10}; // Generating the difference between ADD and SUB
+          3'b000: alu_control <= {1'b0, i_instruction[30], 2'b10}; // Generating the difference between ADD and SUB
           3'b111: alu_control <= 4'b0000;
           3'b110: alu_control <= 4'b0001;
           default : begin end
@@ -99,9 +87,23 @@ module execute (
       default : begin end
     endcase
 
-    alu_result <= w_alu_result;
+    #2 alu_result <= w_alu_result; // TODO: make sure we don't need the delay
     alu_zero <= w_alu_zero;
     jmp_addr <= i_pc + {i_immediate, 1'b0};
   end
 
+  always @ (negedge i_clk) begin
+    o_branch <= branch;
+    o_mem_write <= mem_write;
+    o_mem_read <= mem_read;
+    o_mem_to_reg <= mem_to_reg;
+    o_reg_write <= reg_write;
+    
+    o_rs2_value <= rs2_value;
+    o_instruction <= instruction;
+    o_pc <= pc;
+    o_alu_zero <= alu_zero;
+    o_alu_result <= alu_result;
+    o_jmp_addr <= jmp_addr;
+    end
 endmodule
