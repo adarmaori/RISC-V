@@ -1,2 +1,4 @@
 *.pdf
 *.vcd
+*.out
+.DS_Store
