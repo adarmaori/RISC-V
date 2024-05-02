@@ -1,17 +1,16 @@
 module alu(
-  input [3:0] control,
-  input [63:0] a,
-  input [63:0] b,
-  output [63:0] result,
-  output carry,
-  output zero
+  input [3:0] i_control,
+  input [63:0] i_a,
+  input [63:0] i_b,
+  output [63:0] o_result,
+  output o_zero
   );
   
-  assign zero = result == 0;
+  assign o_zero = o_result == 0;
 
-  assign result = (control == 0) ? a + b :
-                  (control == 1) ? a - b :
-                  (control == 2) ? a & b :
-                  (control == 3) ? a | b;
+  assign o_result = (i_control == 4'b0010) * (i_a + i_b) |
+                    (i_control == 4'b0110) * (i_a - i_b) |
+                    (i_control == 4'b0000) * (i_a & i_b) |
+                    (i_control == 4'b0001) * (i_a | i_b);
 
   endmodule
