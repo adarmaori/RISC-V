@@ -81,10 +81,9 @@ module regfile(
     mem[31] = 31;
   end
   always @ (posedge i_clk) begin
-    if (i_we && i_rd) begin // TODO: get rid of this one too
+    #1 if (i_we && i_rd) begin // TODO: get rid of this one too
       mem[i_rd] <= i_data_in;
     end
   end
-
 
   endmodule

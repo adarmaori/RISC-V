@@ -1,5 +1,6 @@
 module write_back (
   input i_clk,
+  input i_stall,
   input [63:0] i_alu_result,
   input [63:0] i_mem_data,
   
@@ -22,9 +23,11 @@ module write_back (
   assign o_rd_we = rd_we;
 
   always @ (posedge i_clk) begin
-    rd_index <= i_instruction[11:7];
-    rd_data <= i_mem_to_reg ? i_mem_data : i_alu_result;
-    rd_we <= i_reg_write;
+    if (!i_stall) begin
+      rd_index <= i_instruction[11:7];
+      rd_data <= i_mem_to_reg ? i_mem_data : i_alu_result;
+      rd_we <= i_reg_write;
+    end
   end
 
 
