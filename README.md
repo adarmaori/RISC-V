@@ -13,4 +13,6 @@ Next Steps:
 
  - [x] Fix the race conditions (identifiable by a #1 delay statement infront of them 'cause I was lazy)
  - [ ] Add the rest of the ISA and run actual tests
+ - [ ] Probably gonna need a big refactor, mainly for lowering verbosity (maybe) 
  - [ ] Add interfaces for external memory
+ 
