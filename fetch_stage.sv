@@ -44,7 +44,7 @@ module instruction_fetch(
   end
 
   always @ (negedge i_clk) begin
-    #1 if (!i_stall & !i_flush) begin
+    if (!i_stall & !i_flush) begin
       o_pc          <= pc_next;
       o_instruction <= instruction;
     end else if (i_flush) begin

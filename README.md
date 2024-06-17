@@ -11,6 +11,6 @@ I've successfully implemented the minimum-viable-ISA which is only the instructi
 
 Next Steps:
 
- - [ ] Fix the race conditions (identifiable by a #1 delay statement infront of them 'cause I was lazy)
+ - [x] Fix the race conditions (identifiable by a #1 delay statement infront of them 'cause I was lazy)
  - [ ] Add the rest of the ISA and run actual tests
  - [ ] Add interfaces for external memory

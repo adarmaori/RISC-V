@@ -93,6 +93,8 @@ module execute (
       alu_a <= i_rs1_value; 
       alu_b <= i_alu_src ? i_immediate : i_rs2_value;
 
+      jmp_addr <= i_pc + i_immediate + i_immediate + 16;
+
       case (i_alu_op) 
         2'b00: alu_control <= 4'b0010;
         2'b01: alu_control <= 4'b0110;
@@ -108,9 +110,6 @@ module execute (
         default : begin end
       endcase
 
-      #1 alu_result <= w_alu_result; // TODO: make sure we don't need the delay
-      alu_zero <= w_alu_zero;
-      jmp_addr <= i_pc + i_immediate + i_immediate + 16;
     end
   end
 
@@ -126,8 +125,8 @@ module execute (
       o_rs2_value <= rs2_value;
       o_instruction <= instruction;
       o_pc <= pc;
-      o_alu_zero <= alu_zero;
-      o_alu_result <= alu_result;
+      o_alu_zero <= w_alu_zero;
+      o_alu_result <= w_alu_result;
       o_jmp_addr <= jmp_addr;
 
     end
