@@ -15,19 +15,19 @@ module execute (
   input             i_mem_to_reg,
   input             i_reg_write,
 
-  output reg [31:0] o_instruction,
-  output reg [63:0] o_pc,
-  output reg [63:0] o_rs1_value,
-  output reg [63:0] o_rs2_value,
-  output reg [63:0] o_alu_result,
-  output reg        o_alu_zero,
-  output reg [63:0] o_jmp_addr,
+  output reg [31:0] o_exmem_instruction,
+  output reg [63:0] o_exmem_pc,
+  output reg [63:0] o_exmem_rs1_value,
+  output reg [63:0] o_exmem_rs2_value,
+  output reg [63:0] o_exmem_alu_result,
+  output reg        o_exmem_alu_zero,
+  output reg [63:0] o_exmem_jmp_addr,
 
-  output reg        o_branch,
-  output reg        o_mem_write,
-  output reg        o_mem_read,
-  output reg        o_mem_to_reg,
-  output reg        o_reg_write
+  output reg        o_exmem_branch,
+  output reg        o_exmem_mem_write,
+  output reg        o_exmem_mem_read,
+  output reg        o_exmem_mem_to_reg,
+  output reg        o_exmem_reg_write
 
 );
 
@@ -62,19 +62,19 @@ module execute (
   reg alu_zero;
   
   initial begin
-     o_instruction = 0;
-     o_pc = 0;
-     o_rs1_value = 0;
-     o_rs2_value = 0;
-     o_alu_result = 0;
-     o_alu_zero = 0;
-     o_jmp_addr = 0;
+     o_exmem_instruction = 0;
+     o_exmem_pc = 0;
+     o_exmem_rs1_value = 0;
+     o_exmem_rs2_value = 0;
+     o_exmem_alu_result = 0;
+     o_exmem_alu_zero = 0;
+     o_exmem_jmp_addr = 0;
 
-     o_branch = 0;
-     o_mem_write = 0; 
-     o_mem_read = 0;
-     o_mem_to_reg = 0;
-     o_reg_write = 0;
+     o_exmem_branch = 0;
+     o_exmem_mem_write = 0; 
+     o_exmem_mem_read = 0;
+     o_exmem_mem_to_reg = 0;
+     o_exmem_reg_write = 0;
   end
 
 
@@ -95,39 +95,41 @@ module execute (
 
       jmp_addr <= i_pc + i_immediate + i_immediate + 16;
 
-      case (i_alu_op) 
-        2'b00: alu_control <= 4'b0010;
-        2'b01: alu_control <= 4'b0110;
-        2'b10: begin
-          case (i_instruction[14:12])
-            3'b000: alu_control <= {1'b0, i_instruction[30], 2'b10}; // Generating the difference between ADD and SUB
-            3'b111: alu_control <= 4'b0000;
-            3'b110: alu_control <= 4'b0001;
-            default : begin end
-          endcase
-        end
-        
-        default : begin end
-      endcase
+      // case (i_alu_op) 
+      //   2'b00: alu_control <= 4'b0010;
+      //   2'b01: alu_control <= 4'b0110;
+      //   2'b10: begin
+      //     case (i_instruction[14:12])
+      //       3'b000: alu_control <= {1'b0, i_instruction[30], 2'b10}; // Generating the difference between ADD and SUB
+      //       3'b111: alu_control <= 4'b0000;
+      //       3'b110: alu_control <= 4'b0001;
+      //       default : begin end
+      //     endcase
+      //   end
+      //   
+      //   default : begin end
+      // endcase
+      // TODO: check if the commented block above is actually needed
+      alu_control <= {i_instruction[14:12], i_instruction[30]};
 
     end
   end
 
   always @ (negedge i_clk) begin
     if (!i_stall) begin
-      o_branch <= branch;
-      o_mem_write <= mem_write;
-      o_mem_read <= mem_read;
-      o_mem_to_reg <= mem_to_reg;
-      o_reg_write <= reg_write;
+      o_exmem_branch <= branch;
+      o_exmem_mem_write <= mem_write;
+      o_exmem_mem_read <= mem_read;
+      o_exmem_mem_to_reg <= mem_to_reg;
+      o_exmem_reg_write <= reg_write;
 
-      o_rs1_value <= rs1_value;
-      o_rs2_value <= rs2_value;
-      o_instruction <= instruction;
-      o_pc <= pc;
-      o_alu_zero <= w_alu_zero;
-      o_alu_result <= w_alu_result;
-      o_jmp_addr <= jmp_addr;
+      o_exmem_rs1_value <= rs1_value;
+      o_exmem_rs2_value <= rs2_value;
+      o_exmem_instruction <= instruction;
+      o_exmem_pc <= pc;
+      o_exmem_alu_zero <= w_alu_zero;
+      o_exmem_alu_result <= w_alu_result;
+      o_exmem_jmp_addr <= jmp_addr;
 
     end
   end

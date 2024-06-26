@@ -4,7 +4,6 @@ This is a personal project I'm doing, mostly to learn about processor architectu
 By the end of this project I hope to have a RISC-V core with efficient pipelining and other optimizations, that will be customizable enogh to turn it into ome piece of a larger, multi-core processor in the future. This is still very much in the idea face, but that is the idea.
 
 
-
 ## Progress Report
 
 I've successfully implemented the minimum-viable-ISA which is only the instructions LD, ST, ADD, SUB, AND, OR, and BEQ. I've done so in a parallelised way with all the forwarding and satlling I could foresee being necessary (maybe there are some that I've missed but my tests worked fine).
@@ -16,3 +15,5 @@ Next Steps:
  - [ ] Probably gonna need a big refactor, mainly for lowering verbosity (maybe) 
  - [ ] Add interfaces for external memory
  
+
+NOTE: DO I NEED TO ADD OUTPUTS FOR STAGE REGISTER VARIABLES INDIVIDUALLY FOR THINGS LIKE FORWARDING CONTROL? SEEMS TO PREVENT A BUNCH OF RACE CONDIOTIONS

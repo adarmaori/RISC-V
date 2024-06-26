@@ -14,15 +14,15 @@ module mem_access (
   input i_mem_to_reg,
   input i_reg_write,
 
-  output reg [31:0] o_instruction,
-  output reg [63:0] o_alu_result,
-  output reg [63:0] o_mem_data,
-  output reg [63:0] o_rs1_value,
-  output reg [63:0] o_rs2_value,
+  output reg [31:0] o_memwb_instruction,
+  output reg [63:0] o_memwb_alu_result,
+  output reg [63:0] o_memwb_mem_data,
+  output reg [63:0] o_memwb_rs1_value,
+  output reg [63:0] o_memwb_rs2_value,
 
-  output reg o_reg_write,
-  output reg o_mem_to_reg,
-  output reg o_pc_src
+  output reg o_memwb_reg_write,
+  output reg o_memwb_mem_to_reg,
+  output reg o_memwb_pc_src
   // TODO: implement access point to external memory
 );
   
@@ -30,15 +30,15 @@ module mem_access (
 
   initial begin
     data_memory[49] = 5;
-    o_instruction = 0;
-    o_alu_result = 0;
-    o_mem_data = 0;
-    o_rs1_value = 0;
-    o_rs2_value = 0;
+    o_memwb_instruction = 0;
+    o_memwb_alu_result = 0;
+    o_memwb_mem_data = 0;
+    o_memwb_rs1_value = 0;
+    o_memwb_rs2_value = 0;
 
-    o_reg_write = 0;
-    o_mem_to_reg = 0;
-    o_pc_src = 0;
+    o_memwb_reg_write = 0;
+    o_memwb_mem_to_reg = 0;
+    o_memwb_pc_src = 0;
   end
 
   reg [31:0] instruction;
@@ -207,14 +207,14 @@ module mem_access (
 
   always @ (negedge i_clk) begin
     if (!i_stall) begin
-      o_alu_result <= alu_result;
-      o_rs1_value <= rs1_value;
-      o_rs2_value <= rs2_value;
-      o_mem_data <= mem_data;
-      o_mem_to_reg <= mem_to_reg;
-      o_reg_write <= reg_write;
-      o_pc_src <= pc_src;
-      o_instruction <= instruction;
+      o_memwb_alu_result <= alu_result;
+      o_memwb_rs1_value <= rs1_value;
+      o_memwb_rs2_value <= rs2_value;
+      o_memwb_mem_data <= mem_data;
+      o_memwb_mem_to_reg <= mem_to_reg;
+      o_memwb_reg_write <= reg_write;
+      o_memwb_pc_src <= pc_src;
+      o_memwb_instruction <= instruction;
       
     end
   end

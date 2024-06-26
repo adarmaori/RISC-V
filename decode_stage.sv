@@ -11,19 +11,19 @@ module instruction_decode(
   output [4:0]      o_rs2_index,
 
   // pipeline regiter
-  output reg [31:0] o_instruction,
-  output reg [63:0] o_rs1_value,
-  output reg [63:0] o_rs2_value,
-  output reg [63:0] o_immediate,
-  output reg [63:0] o_pc,
+  output reg [31:0] o_idex_instruction,
+  output reg [63:0] o_idex_rs1_value,
+  output reg [63:0] o_idex_rs2_value,
+  output reg [63:0] o_idex_immediate,
+  output reg [63:0] o_idex_pc,
 
-  output reg [1:0]  o_alu_op,
-  output reg        o_alu_src,
-  output reg        o_branch,
-  output reg        o_mem_write,
-  output reg        o_mem_read,
-  output reg        o_mem_to_reg,
-  output reg        o_reg_write
+  output reg [1:0]  o_idex_alu_op,
+  output reg        o_idex_alu_src,
+  output reg        o_idex_branch,
+  output reg        o_idex_mem_write,
+  output reg        o_idex_mem_read,
+  output reg        o_idex_mem_to_reg,
+  output reg        o_idex_reg_write
   );
   
   parameter LD = 7'b0000001;  // TODO: figure out the actual opcodes
@@ -46,17 +46,17 @@ module instruction_decode(
   reg reg_write = 0;
 
   initial begin
-    o_instruction = 0;
-    o_rs1_value = 0;
-    o_rs2_value = 0;
-    o_immediate = 0;
-    o_pc = 0;
-    o_alu_op = 0;
-    o_alu_src = 0;
-    o_branch = 0;
-    o_mem_write = 0;
-    o_mem_read = 0;
-    o_mem_to_reg = 0;
+    o_idex_instruction = 0;
+    o_idex_rs1_value = 0;
+    o_idex_rs2_value = 0;
+    o_idex_immediate = 0;
+    o_idex_pc = 0;
+    o_idex_alu_op = 0;
+    o_idex_alu_src = 0;
+    o_idex_branch = 0;
+    o_idex_mem_write = 0;
+    o_idex_mem_read = 0;
+    o_idex_mem_to_reg = 0;
   end
   always @ (posedge i_clk) begin
     if (!i_stall) begin
@@ -108,17 +108,17 @@ module instruction_decode(
   end
   
   always @ (negedge i_clk) begin
-    o_pc <= pc;
-    o_instruction <= instruction;
-    o_rs1_value <= i_rs1_value;
-    o_rs2_value <= i_rs2_value;
-    o_alu_op <= alu_op;
-    o_alu_src <= alu_src;
-    o_branch <= branch;
-    o_mem_write <= mem_write;
-    o_mem_read <= mem_read;
-    o_mem_to_reg <= mem_to_reg;
-    o_reg_write <= reg_write;
-    o_immediate <= immediate;
+    o_idex_pc <= pc;
+    o_idex_instruction <= instruction;
+    o_idex_rs1_value <= i_rs1_value;
+    o_idex_rs2_value <= i_rs2_value;
+    o_idex_alu_op <= alu_op;
+    o_idex_alu_src <= alu_src;
+    o_idex_branch <= branch;
+    o_idex_mem_write <= mem_write;
+    o_idex_mem_read <= mem_read;
+    o_idex_mem_to_reg <= mem_to_reg;
+    o_idex_reg_write <= reg_write;
+    o_idex_immediate <= immediate;
   end
   endmodule

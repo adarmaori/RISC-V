@@ -93,23 +93,21 @@ module processor (
 
   stall_unit staller (
     .i_clk (i_clk),
-    
     .i_memwb_mem_to_reg (EXMEM_MEM_TO_REG),
     .i_memwb_rd         (EXMEM_INST[11:7]),
     .i_idex_rs1         (IDEX_INST[19:15]),
     .i_idex_rs2         (IDEX_INST[24:20]),
-
-    .o_decode          (STALL)
+    .o_decode           (STALL)
     );
 
   instruction_fetch fetcher(
-    .i_clk         (i_clk),
-    .i_stall       (STALL),
-    .i_flush       (EXMEM_BRANCH & EXMEM_ALU_ZERO),
-    .i_address     (EXMEM_JMP_ADDR),
-    .i_jmp         (EXMEM_BRANCH & EXMEM_ALU_ZERO),
-    .o_instruction (IFID_INST),
-    .o_pc          (IFID_PC)
+    .i_clk              (i_clk),
+    .i_stall            (STALL),
+    .i_flush            (EXMEM_BRANCH & EXMEM_ALU_ZERO),
+    .i_address          (EXMEM_JMP_ADDR),
+    .i_jmp              (EXMEM_BRANCH & EXMEM_ALU_ZERO),
+    .o_ifid_instruction (IFID_INST),
+    .o_ifid_pc          (IFID_PC)
     );
 
   instruction_decode decode(
@@ -124,19 +122,19 @@ module processor (
     .o_rs1_index   (rs1),
     .o_rs2_index   (rs2),
 
-    .o_instruction (IDEX_INST),
-    .o_rs1_value   (IDEX_RS1_VALUE),
-    .o_rs2_value   (IDEX_RS2_VALUE),
-    .o_immediate   (IDEX_IMM),
-    .o_pc          (IDEX_PC),
+    .o_idex_instruction (IDEX_INST),
+    .o_idex_rs1_value   (IDEX_RS1_VALUE),
+    .o_idex_rs2_value   (IDEX_RS2_VALUE),
+    .o_idex_immediate   (IDEX_IMM),
+    .o_idex_pc          (IDEX_PC),
 
-    .o_alu_op      (IDEX_ALU_OP),
-    .o_alu_src     (IDEX_ALU_SRC),
-    .o_branch      (IDEX_BRANCH),
-    .o_mem_write   (IDEX_MEM_WRITE),
-    .o_mem_read    (IDEX_MEM_READ),
-    .o_mem_to_reg  (IDEX_MEM_TO_REG),
-    .o_reg_write   (IDEX_REG_WRITE)
+    .o_idex_alu_op      (IDEX_ALU_OP),
+    .o_idex_alu_src     (IDEX_ALU_SRC),
+    .o_idex_branch      (IDEX_BRANCH),
+    .o_idex_mem_write   (IDEX_MEM_WRITE),
+    .o_idex_mem_read    (IDEX_MEM_READ),
+    .o_idex_mem_to_reg  (IDEX_MEM_TO_REG),
+    .o_idex_reg_write   (IDEX_REG_WRITE)
     );
 
   execute executer (
@@ -157,20 +155,19 @@ module processor (
     .i_mem_to_reg  (IDEX_MEM_TO_REG),
     .i_reg_write   (IDEX_REG_WRITE),
 
+    .o_exmem_instruction (EXMEM_INST),
+    .o_exmem_pc          (EXMEM_PC),
+    .o_exmem_rs1_value   (EXMEM_RS1_VALUE),
+    .o_exmem_rs2_value   (EXMEM_RS2_VALUE),
+    .o_exmem_alu_result  (EXMEM_ALU_RES),
+    .o_exmem_alu_zero    (EXMEM_ALU_ZERO),
+    .o_exmem_jmp_addr    (EXMEM_JMP_ADDR),
 
-    .o_instruction (EXMEM_INST),
-    .o_pc          (EXMEM_PC),
-    .o_rs1_value   (EXMEM_RS1_VALUE),
-    .o_rs2_value   (EXMEM_RS2_VALUE),
-    .o_alu_result  (EXMEM_ALU_RES),
-    .o_alu_zero    (EXMEM_ALU_ZERO),
-    .o_jmp_addr    (EXMEM_JMP_ADDR),
-
-    .o_branch      (EXMEM_BRANCH),
-    .o_mem_write   (EXMEM_MEM_WRITE),
-    .o_mem_read    (EXMEM_MEM_READ),
-    .o_mem_to_reg  (EXMEM_MEM_TO_REG),
-    .o_reg_write   (EXMEM_REG_WRITE)
+    .o_exmem_branch      (EXMEM_BRANCH),
+    .o_exmem_mem_write   (EXMEM_MEM_WRITE),
+    .o_exmem_mem_read    (EXMEM_MEM_READ),
+    .o_exmem_mem_to_reg  (EXMEM_MEM_TO_REG),
+    .o_exmem_reg_write   (EXMEM_REG_WRITE)
     );
 
   mem_access memory_accessor (
@@ -190,15 +187,15 @@ module processor (
     .i_mem_to_reg  (EXMEM_MEM_TO_REG),
     .i_reg_write   (EXMEM_REG_WRITE),
 
-    .o_instruction (MEMWB_INST),
-    .o_alu_result  (MEMWB_ALU_RES),
-    .o_mem_data    (MEMWB_MEM_DATA),
-    .o_rs1_value   (MEMWB_RS1_VALUE),
-    .o_rs2_value   (MEMWB_RS2_VALUE),
+    .o_memwb_instruction (MEMWB_INST),
+    .o_memwb_alu_result  (MEMWB_ALU_RES),
+    .o_memwb_mem_data    (MEMWB_MEM_DATA),
+    .o_memwb_rs1_value   (MEMWB_RS1_VALUE),
+    .o_memwb_rs2_value   (MEMWB_RS2_VALUE),
 
-    .o_reg_write   (MEMWB_REG_WRITE),
-    .o_mem_to_reg  (MEMWB_MEM_TO_REG),
-    .o_pc_src      (pc_src)
+    .o_memwb_reg_write   (MEMWB_REG_WRITE),
+    .o_memwb_mem_to_reg  (MEMWB_MEM_TO_REG),
+    .o_memwb_pc_src      (pc_src)
     );
 
   write_back writer (

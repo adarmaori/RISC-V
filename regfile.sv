@@ -17,7 +17,7 @@ module regfile(
 
   // DEBUG SIGNALS
   wire [63:0] r1 = mem[1];
-  wire [63:0] r2 = mem[2];
+  wire [63:0] r2 = mem[2]; 
   wire [63:0] r3 = mem[3];
   wire [63:0] r4 = mem[4];
   wire [63:0] r5 = mem[5];
@@ -46,7 +46,8 @@ module regfile(
   wire [63:0] r28 = mem[28];
   wire [63:0] r29 = mem[29];
   wire [63:0] r30 = mem[30];
-  wire [63:0] r31 = mem[31];
+  wire [63:0] r31 = mem[31]; // Temporary output register. Gonna look at it during 23
+
   initial begin
     mem[1] = 1;
     mem[2] = 2;
@@ -81,7 +82,7 @@ module regfile(
     mem[31] = 31;
   end
   always @ (posedge i_clk) begin
-    if (i_we && i_rd) begin // TODO: get rid of this one too
+    #1 if (i_we && i_rd) begin // TODO: get rid of this one too
       mem[i_rd] <= i_data_in;
     end
   end

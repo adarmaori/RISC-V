@@ -23,22 +23,13 @@ module write_back (
     o_rd_data = 0;
     o_rd_index = 0;
   end
-  // assign o_rd_index = rd_index;
-  // assign o_rd_data = rd_data;
-  // assign o_rd_we = rd_we;
 
-  always @ (i_clk) begin
-    if (i_clk) begin
+  always @ (posedge i_clk) begin
       if (!i_stall) begin
         o_rd_index = i_instruction[11:7];
         o_rd_data = i_mem_to_reg ? i_mem_data : i_alu_result;
         o_rd_we = i_reg_write;
       end
-    end else begin
-      // o_rd_index = rd_index;
-      // o_rd_data = rd_data;
-      // o_rd_we = rd_we;
-    end
   end
 
 
